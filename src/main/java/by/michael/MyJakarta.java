@@ -3,35 +3,26 @@ package by.michael;
 import by.michael.entity.Technology;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.ObjectReader;
+import com.fasterxml.jackson.databind.cfg.ContextAttributes;
 
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 public class MyJakarta {
   private String version;
   private String description;
   private List<Technology> technologies;
-
   private String path;
 
-  public void writeToJson(String path) {
+  public MyJakarta() {}
 
-    try (FileOutputStream outputStream = new FileOutputStream(path); ) {
-      ObjectMapper objectMapper = new ObjectMapper();
-
-      String result = objectMapper.writeValueAsString(this);
-
-      outputStream.write(result.getBytes());
-
-    } catch (IOException e) {
-      throw new RuntimeException(e);
-    }
+  public MyJakarta(String version, String description, List<Technology> technologies) {
+    this.version = version;
+    this.description = description;
+    this.technologies = technologies;
   }
 
   public void setVersion(String version) {
@@ -43,14 +34,6 @@ public class MyJakarta {
   }
 
   public void setTechnologies(List<Technology> technologies) {
-    this.technologies = technologies;
-  }
-
-  public MyJakarta() {}
-
-  public MyJakarta(String version, String description, List<Technology> technologies) {
-    this.version = version;
-    this.description = description;
     this.technologies = technologies;
   }
 
@@ -66,27 +49,27 @@ public class MyJakarta {
     return technologies;
   }
 
+  public void writeToJson(String path) {
+    try (FileOutputStream outputStream = new FileOutputStream(path)) {
+      ObjectMapper objectMapper = new ObjectMapper();
+
+      String result = objectMapper.writeValueAsString(this);
+
+      outputStream.write(result.getBytes());
+
+    } catch (IOException e) {
+      throw new RuntimeException(e);
+    }
+  }
+
   public MyJakarta readFromJson(String path) {
     try (FileInputStream inputStream = new FileInputStream(path)) {
-      ObjectMapper mapper = new ObjectMapper();
+      ObjectMapper objectMapper = new ObjectMapper();
 
-      String jsonString = Arrays.toString(inputStream.readAllBytes());
+      String jsonString = new String(inputStream.readAllBytes());
 
-      JsonNode jsonNode = mapper.readTree(jsonString);
+      return objectMapper.readValue(jsonString, MyJakarta.class);
 
-      String version = String.valueOf(jsonNode.get("version"));
-      String description = String.valueOf(jsonNode.get("description"));
-      JsonNode technologies = jsonNode.get("technologies");
-      List<Technology> technologyList = new ArrayList<>();
-
-      for (JsonNode technology : technologies) {
-        technologyList.add(
-            new Technology(
-                String.valueOf(technology.get("name")),
-                String.valueOf(technology.get("description"))));
-      }
-
-      return new MyJakarta(version, description, technologyList);
     } catch (IOException e) {
       throw new RuntimeException(e);
     }
@@ -105,5 +88,19 @@ public class MyJakarta {
     }
 
     writeToJson(path);
+  }
+
+  @Override
+  public boolean equals(Object o) {
+    if (o == null || getClass() != o.getClass()) return false;
+    MyJakarta myJakarta = (MyJakarta) o;
+    return Objects.equals(version, myJakarta.version)
+        && Objects.equals(description, myJakarta.description)
+        && Objects.equals(technologies, myJakarta.technologies);
+  }
+
+  @Override
+  public int hashCode() {
+    return Objects.hash(version, description, technologies);
   }
 }

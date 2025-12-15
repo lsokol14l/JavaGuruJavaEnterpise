@@ -43,18 +43,51 @@ public class MyJakartaTest {
     assertTrue(technologies.get(1).has("description"));
   }
 
-  @DisplayName("Проверка метода writeToJson()")
+  @DisplayName("Проверка метода writeToJson() с корректными данными")
   @Test
   public void testWriteToJson_whenInvoke_thenCreateAJsonFileWithData() {
     List<Technology> technologyList = new ArrayList<Technology>();
     technologyList.add(new Technology("maven", "instrument for automatic building projects"));
     technologyList.add(
         new Technology("jackson", "instrument for serialize/deserialize json objects"));
-    technologyList.add(new Technology("junit", "The programmer-friendly testing framework for Java and the JVM"));
+    technologyList.add(
+        new Technology("junit", "The programmer-friendly testing framework for Java and the JVM"));
 
     MyJakarta myJakarta =
         new MyJakarta("1.0-SNAPSHOT", "my first Jakarta EE technologies", technologyList);
 
     myJakarta.writeToJson("src/main/resources/data.json");
+
+    MyJakarta result = new MyJakarta().readFromJson("src/main/resources/data.json");
+
+    assertEquals(myJakarta, result);
+  }
+
+  @DisplayName("Проверка метода writeToJson() с пустым списком технологий")
+  @Test
+  public void testWriteToJson_whenInvoke_thenCreateAJsonFileWithEmptyTechnologyList() {
+    List<Technology> technologyList = new ArrayList<Technology>();
+
+    MyJakarta myJakarta =
+        new MyJakarta("1.0-SNAPSHOT", "my first Jakarta EE technologies", technologyList);
+
+    myJakarta.writeToJson("src/main/resources/data.json");
+
+    MyJakarta result = new MyJakarta().readFromJson("src/main/resources/data.json");
+
+    assertEquals(myJakarta, result);
+  }
+
+  @DisplayName("Проверка метода writeToJson() с пустым списком технологий")
+  @Test
+  public void testWriteToJson_whenInvoke_thenCreateAJsonFileWithEmptyData() {
+    MyJakarta myJakarta =
+        new MyJakarta(null, null, null);
+
+    myJakarta.writeToJson("src/main/resources/data.json");
+
+    MyJakarta result = new MyJakarta().readFromJson("src/main/resources/data.json");
+
+    assertEquals(myJakarta, result);
   }
 }
