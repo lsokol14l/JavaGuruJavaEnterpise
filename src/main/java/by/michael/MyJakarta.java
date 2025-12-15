@@ -1,39 +1,34 @@
 package by.michael;
 
 import by.michael.entity.Technology;
-import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.ObjectReader;
-import com.fasterxml.jackson.databind.cfg.ContextAttributes;
 
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
+import java.io.*;
 import java.util.*;
 
 public class MyJakarta {
   private String version;
   private String description;
   private List<Technology> technologies;
+
   private String path;
+
+  {
+    Properties properties = new Properties();
+    try (FileInputStream fileInputStream = new FileInputStream("config.properties")) {
+      properties.load(fileInputStream);
+      path = properties.getProperty()
+    } catch (IOException e) {
+      throw new RuntimeException(e);
+    }
+    readFromJson(path);
+  }
 
   public MyJakarta() {}
 
   public MyJakarta(String version, String description, List<Technology> technologies) {
     this.version = version;
     this.description = description;
-    this.technologies = technologies;
-  }
-
-  public void setVersion(String version) {
-    this.version = version;
-  }
-
-  public void setDescription(String description) {
-    this.description = description;
-  }
-
-  public void setTechnologies(List<Technology> technologies) {
     this.technologies = technologies;
   }
 
@@ -50,7 +45,10 @@ public class MyJakarta {
   }
 
   public void writeToJson(String path) {
+    if (path == null) return;
+
     try (FileOutputStream outputStream = new FileOutputStream(path)) {
+
       ObjectMapper objectMapper = new ObjectMapper();
 
       String result = objectMapper.writeValueAsString(this);
@@ -76,15 +74,13 @@ public class MyJakarta {
   }
 
   public void updateTechnology(Technology technology, String path) {
-    Optional<Technology> first =
-        technologies.stream()
-            .filter(tech -> tech.getName().equals(technology.getName()))
-            .findFirst();
-    if (first.isPresent()) {
-      Technology oldTechnology = first.get();
-      oldTechnology = technology;
-    } else {
-      technologies.add(technology);
+    if (technology == null || path == null) return;
+
+    List<Technology> technologies = getTechnologies();
+
+    for (int i = 0; i < technologies.size(); i++) {
+      if (technologies.get(i).getName().equals(technology.getName()))
+        technologies.set(i, technology);
     }
 
     writeToJson(path);

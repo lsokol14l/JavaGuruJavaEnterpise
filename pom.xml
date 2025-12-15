@@ -37,6 +37,25 @@
             <scope>test</scope>
         </dependency>
     </dependencies>
+
+    <profiles>
+        <profile>
+            <id>prod</id>
+
+        </profile>
+        <profile>
+            <id>dev</id>
+
+        </profile>
+        <profile>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
+            <id>test</id>
+
+        </profile>
+    </profiles>
+
     <build>
         <plugins>
             <plugin>
