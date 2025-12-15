@@ -1,0 +1,1 @@
+{"version":"1.0-SNAPSHOT","description":"my first Jakarta EE technologies","technologies":[{"name":"maven","description":"instrument for automatic building projects"},{"name":"jackson","description":"instrument for serialize/deserialize json objects"},{"name":"junit","description":"The programmer-friendly testing framework for Java and the JVM"}]}
