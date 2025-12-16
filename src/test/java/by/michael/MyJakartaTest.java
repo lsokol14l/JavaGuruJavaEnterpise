@@ -198,4 +198,31 @@ public class MyJakartaTest {
     assertEquals(myJakarta, result);
     assertEquals(myOldJakarta, result);
   }
+
+  @DisplayName("Проверка метода updateTechnology() если технологии для обновления не было")
+  @Test
+  public void testUpdateTechnology_withNewData_whenInvokeUpdateTechnology_shouldUpdateData() {
+    List<Technology> technologyList = new ArrayList<Technology>();
+    technologyList.add(new Technology("maven", "instrument for automatic building projects"));
+    technologyList.add(
+        new Technology("jackson", "instrument for serialize/deserialize json objects"));
+    technologyList.add(
+        new Technology("junit", "The programmer-friendly testing framework for Java and the JVM"));
+
+    MyJakarta myJakarta =
+        new MyJakarta("1.0-SNAPSHOT", "my first Jakarta EE technologies", technologyList);
+    MyJakarta myOldJakarta =
+        new MyJakarta("1.0-SNAPSHOT", "my first Jakarta EE technologies", technologyList);
+
+    myJakarta.writeToJson(null);
+
+    myJakarta.updateTechnology(
+        new Technology("properties", "technology that allows you to start setting conditions"),
+            null);
+
+    MyJakarta result = new MyJakarta().readFromJson(null);
+
+    assertEquals(myJakarta, result);
+    assertEquals(myOldJakarta, result);
+  }
 }

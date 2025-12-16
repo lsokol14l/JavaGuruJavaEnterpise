@@ -44,13 +44,14 @@
 
         </profile>
         <profile>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
             <id>dev</id>
 
         </profile>
         <profile>
-            <activation>
-                <activeByDefault>true</activeByDefault>
-            </activation>
+
             <id>test</id>
 
         </profile>

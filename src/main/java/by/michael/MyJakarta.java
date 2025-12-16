@@ -11,17 +11,22 @@ public class MyJakarta {
   private String description;
   private List<Technology> technologies;
 
-  private String path;
+  // сделала гпт надо произвести анализ
+  private static String defaultPath;
 
-  {
+  static {
     Properties properties = new Properties();
-    try (FileInputStream fileInputStream = new FileInputStream("config.properties")) {
-      properties.load(fileInputStream);
-      path = properties.getProperty()
+    String profile = System.getProperty("env", "dev"); // -Denv=prod / -Denv=test
+    try (FileInputStream is = new FileInputStream("config.properties")) {
+      properties.load(is);
+      defaultPath = properties.getProperty(profile + ".filepath");
+      System.out.println("Все ок.");
+      System.out.printf(defaultPath);
     } catch (IOException e) {
-      throw new RuntimeException(e);
+      defaultPath = "src/main/resources/data.json";
+      e.printStackTrace();
+      System.out.println("Что-то пошло не так.");
     }
-    readFromJson(path);
   }
 
   public MyJakarta() {}
@@ -45,7 +50,7 @@ public class MyJakarta {
   }
 
   public void writeToJson(String path) {
-    if (path == null) return;
+    if (path == null) path = defaultPath;
 
     try (FileOutputStream outputStream = new FileOutputStream(path)) {
 
@@ -61,6 +66,8 @@ public class MyJakarta {
   }
 
   public MyJakarta readFromJson(String path) {
+    if (path == null) path = defaultPath;
+
     try (FileInputStream inputStream = new FileInputStream(path)) {
       ObjectMapper objectMapper = new ObjectMapper();
 
@@ -74,14 +81,20 @@ public class MyJakarta {
   }
 
   public void updateTechnology(Technology technology, String path) {
-    if (technology == null || path == null) return;
+    if (technology == null) return;
+    if (path == null) path = defaultPath;
 
     List<Technology> technologies = getTechnologies();
 
+    boolean updated = false;
     for (int i = 0; i < technologies.size(); i++) {
-      if (technologies.get(i).getName().equals(technology.getName()))
+      if (technologies.get(i).getName().equals(technology.getName())) {
         technologies.set(i, technology);
+        updated = true;
+      }
     }
+
+    if (!updated) technologies.add(technology);
 
     writeToJson(path);
   }
