@@ -25,9 +25,31 @@ public class GetAllUsersServlet extends HttpServlet {
     PrintWriter writer = resp.getWriter();
 
     writer.println("<html><body>");
+
     for (UserDto user : users) {
-      writer.println("<h2>Id = " + user.getId() + " name: " + user.getName() + "</h2>");
+      String userLink =
+          """
+            <h2><a href="/user?id=%d">Id = %d, name = %s</a></h2>
+          """
+              .formatted(user.getId(), user.getId(), user.getName());
+      writer.println(userLink);
     }
+    writer.println(
+"""
+<form action="update" method="post">
+  <div>
+    <label for="name">Введите id пользователя: </label>
+    <input type="text" name="id" id="id" required />
+  </div>
+  <div>
+    <label for="email">Введите новое имя: </label>
+    <input type="name" name="name" id="name" required />
+  </div>
+  <div>
+    <input type="submit" value="изменить" />
+  </div>
+</form>
+""");
     writer.println("</html></body>");
 
     writer.close();

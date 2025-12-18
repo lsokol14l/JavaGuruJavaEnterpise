@@ -75,7 +75,7 @@ public class UserDaoTests {
   @DisplayName("Проверка метода findUserById с null")
   @Test
   public void testFindUserById_whenInvokeMethod_withNullId_shouldReturnOptionalEmpty()
-          throws IOException {
+      throws IOException {
     // 1) Создание экземпляра класса для тестов
     // 2) Выполнение тестируемого метода (Action) в нашем случае выполняется статический блок
     // (автоматически при создании экземпляра)
@@ -83,5 +83,20 @@ public class UserDaoTests {
 
     // 3) Проверка данных на выходе (Assert)
     assertTrue(userById.isEmpty());
+  }
+
+  @DisplayName("Достаем переменную среды для создания файла с данными data.json")
+  @Test
+  public void testGetSystemVariables_whenInvokeMethod_shouldReturnAbsolutePathToDirectory()
+      throws IOException {
+    // 1) Создание экземпляра класса для тестов
+    // 2) Выполнение тестируемого метода (Action) в нашем случае выполняется статический блок
+    // (автоматически при создании экземпляра)
+    String catalinaBase = System.getenv("CATALINA_BASE");
+    //    System.out.println(catalinaBase);
+    // D:\Java\Libs\tomcat\apache-tomcat-10.1.49-windows-x64\apache-tomcat-10.1.49
+
+    // 3) Проверка данных на выходе (Assert)
+    assertNotNull(catalinaBase);
   }
 }

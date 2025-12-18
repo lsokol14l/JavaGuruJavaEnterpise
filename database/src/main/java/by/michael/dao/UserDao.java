@@ -11,17 +11,18 @@ import java.util.List;
 import java.util.Optional;
 
 public class UserDao {
-  public static String FILEPATH = "src/main/resources/data.json";
+  public static String FILEPATH = System.getenv("CATALINA_BASE") + "\\data" + "\\data.json";
   public static ObjectMapper mapper = new ObjectMapper();
   private List<User> users;
 
   static {
     int index = 10;
+    String tomcatPath = System.getenv("CATALINA_BASE") + "\\data";
+    File dir = new File(tomcatPath);
+
+    if (!dir.exists()) dir.mkdir();
+
     File file = new File(FILEPATH);
-
-    File absoluteFile = file.getParentFile();
-
-    if (!absoluteFile.exists()) absoluteFile.mkdirs();
 
     if (!file.exists()) {
       try {
