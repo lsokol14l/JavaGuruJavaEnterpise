@@ -1,7 +1,5 @@
 package by.michael;
 
-import jakarta.servlet.ServletConfig;
-import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
@@ -16,8 +14,7 @@ public class GetAllUsersServlet extends HttpServlet {
   UserService userService = new UserService();
 
   @Override
-  protected void doGet(HttpServletRequest req, HttpServletResponse resp)
-      throws ServletException, IOException {
+  protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
     resp.setContentType("text/html");
 
     List<UserDto> users = userService.getAllUsers();
@@ -34,22 +31,38 @@ public class GetAllUsersServlet extends HttpServlet {
               .formatted(user.getId(), user.getId(), user.getName());
       writer.println(userLink);
     }
+
     writer.println(
-"""
-<form action="update" method="post">
-  <div>
-    <label for="name">Введите id пользователя: </label>
-    <input type="text" name="id" id="id" required />
-  </div>
-  <div>
-    <label for="email">Введите новое имя: </label>
-    <input type="name" name="name" id="name" required />
-  </div>
-  <div>
-    <input type="submit" value="изменить" />
-  </div>
-</form>
-""");
+        """
+            <form action="update" method="post">
+              <div>
+                <label for="name">Введите id пользователя: </label>
+                <input type="text" name="id" id="id" required />
+              </div>
+              <div>
+                <label for="email">Введите новое имя: </label>
+                <input type="name" name="name" id="name" required />
+              </div>
+              <div>
+                <input type="submit" value="изменить" />
+                <input type="reset" value="очистить" />
+              </div>
+            </form>
+        """);
+
+    writer.println(
+        """
+            <form action="delete" method="post">
+              <div>
+                <label for="name">Введите id пользователя: </label>
+                <input type="text" name="id" id="id" required />
+              </div>
+              <div>
+                <input type="submit" value="удалить" />
+                <input type="reset" value="очистить" />
+              </div>
+            </form>
+            """);
     writer.println("</html></body>");
 
     writer.close();

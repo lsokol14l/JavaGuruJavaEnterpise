@@ -20,8 +20,6 @@ public class User {
     this.id = id;
   }
 
-  public User() {}
-
   public User(Long id, String name) {
     this.name = name;
     this.id = id;

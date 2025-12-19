@@ -1,6 +1,5 @@
 package by.michael;
 
-import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
@@ -14,8 +13,7 @@ public class UserServlet extends HttpServlet {
   UserService userService = new UserService();
 
   @Override
-  protected void doGet(HttpServletRequest req, HttpServletResponse resp)
-      throws ServletException, IOException {
+  protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
     resp.setContentType("text/html");
 
     String stringId = req.getParameter("id");
@@ -25,7 +23,7 @@ public class UserServlet extends HttpServlet {
       return;
     }
 
-    Long id = null;
+    long id;
 
     try {
       id = Long.parseLong(stringId);

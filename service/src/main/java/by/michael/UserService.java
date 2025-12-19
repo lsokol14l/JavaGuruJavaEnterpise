@@ -21,4 +21,8 @@ public class UserService {
   public void updateUser(UserDto user) {
     userDao.updateUser(new User(user.getId(), user.getName()));
   }
+
+  public void deleteUser(Long id) {
+    userDao.deleteUser(id);
+  }
 }

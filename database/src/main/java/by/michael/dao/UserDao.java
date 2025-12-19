@@ -91,4 +91,25 @@ public class UserDao {
       throw new RuntimeException(e);
     }
   }
+
+  public void deleteUser(Long id) {
+    if (id == null) return;
+
+    try {
+      loadDataFromJson();
+    } catch (IOException e) {
+      throw new RuntimeException(e);
+    }
+
+    Optional<User> userToDelete =
+        users.stream().filter(user -> user.getId().equals(id)).findFirst();
+
+    userToDelete.ifPresent(user -> users.remove(user));
+
+    try {
+      updateJson();
+    } catch (IOException e) {
+      throw new RuntimeException(e);
+    }
+  }
 }
