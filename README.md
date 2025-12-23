@@ -1,0 +1,28 @@
+# Задание 5 http-rever-client
+![img.png](img.png)
+
+```json
+{
+    "info": "salary.by",
+    "employees": [
+        {
+        "id": "01",
+        "name": "Иванов И.И.",
+        "salary": 500,
+        "tax": 200
+        },
+        {
+        "id": "02",
+        "name": "Петров П.П.",
+        "salary": 1500,
+        "tax": 100
+        },
+        {
+        "id": "03",
+        "name": "Сидоров С.С.",
+        "salary": 5500,
+        "tax": 50
+        }
+    ]
+}
+```
