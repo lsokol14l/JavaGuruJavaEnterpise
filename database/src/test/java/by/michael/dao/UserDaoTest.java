@@ -29,7 +29,7 @@ class UserDaoTest {
 
     assertNotNull(found);
     assertEquals("Test User", found.getName());
-    assertEquals("test@example.com", found.getLogin());
+    assertEquals("test@example.com", found.getEmail());
   }
 
   @Test

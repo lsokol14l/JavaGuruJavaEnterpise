@@ -2,14 +2,14 @@ package by.michael.entity;
 
 public class User {
   private String name;
-  private String login;
-  private String phoneNumber;
+  private String email;
+  private String phone;
   private String password;
 
-  public User(String name, String login, String phoneNumber, String password) {
+  public User(String name, String email, String phone, String password) {
     this.name = name;
-    this.login = login;
-    this.phoneNumber = phoneNumber;
+    this.email = email;
+    this.phone = phone;
     this.password = password;
   }
 
@@ -21,20 +21,20 @@ public class User {
     this.name = name;
   }
 
-  public String getPhoneNumber() {
-    return phoneNumber;
+  public String getEmail() {
+    return email;
   }
 
-  public void setPhoneNumber(String phoneNumber) {
-    this.phoneNumber = phoneNumber;
+  public void setEmail(String email) {
+    this.email = email;
   }
 
-  public String getLogin() {
-    return login;
+  public String getPhone() {
+    return phone;
   }
 
-  public void setLogin(String login) {
-    this.login = login;
+  public void setPhone(String phone) {
+    this.phone = phone;
   }
 
   public String getPassword() {

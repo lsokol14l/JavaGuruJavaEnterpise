@@ -2,18 +2,11 @@ package by.michael.dao;
 
 import by.michael.config.DatabaseConfig;
 import by.michael.entity.User;
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.ObjectMapper;
 
-import javax.xml.crypto.Data;
-import java.io.File;
-import java.io.IOException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.List;
 
 public class UserDao {
   public void createNewUser(User newUser) {
@@ -23,8 +16,8 @@ public class UserDao {
         PreparedStatement pst = connection.prepareStatement(sql)) {
 
       pst.setString(1, newUser.getName());
-      pst.setString(2, newUser.getLogin());
-      pst.setString(3, newUser.getPhoneNumber());
+      pst.setString(2, newUser.getEmail());
+      pst.setString(3, newUser.getPhone());
       pst.setString(4, newUser.getPassword());
 
       pst.executeUpdate();

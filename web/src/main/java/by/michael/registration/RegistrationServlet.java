@@ -1,5 +1,7 @@
 package by.michael.registration;
 
+import by.michael.UserService;
+import by.michael.dto.UserDto;
 import jakarta.servlet.RequestDispatcher;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -13,6 +15,8 @@ import java.util.Objects;
 
 @WebServlet("/registration")
 public class RegistrationServlet extends HttpServlet {
+  UserService userService = new UserService();
+
   @Override
   protected void doPost(HttpServletRequest req, HttpServletResponse resp)
       throws ServletException, IOException {
@@ -22,70 +26,54 @@ public class RegistrationServlet extends HttpServlet {
     String re_password = req.getParameter("re_password");
     String phone = req.getParameter("phoneNumber");
 
-    RequestDispatcher dispatcher;
-
     if (username == null || username.isEmpty()) {
-      req.setAttribute("status", "invalidName");
-      dispatcher = req.getRequestDispatcher("/registration");
-      dispatcher.forward(req, resp);
+      forwardWithStatus(req, resp, "registration.jsp", "invalidName");
+      return;
     }
     if (email == null || email.isEmpty()) {
-      req.setAttribute("status", "invalidEmail");
-      dispatcher = req.getRequestDispatcher("/registration");
-      dispatcher.forward(req, resp);
+      forwardWithStatus(req, resp, "registration.jsp", "invalidEmail");
+      return;
     }
     if (password == null || password.isEmpty()) {
-      req.setAttribute("status", "invalidPassword");
-      dispatcher = req.getRequestDispatcher("/registration");
-      dispatcher.forward(req, resp);
+      forwardWithStatus(req, resp, "registration.jsp", "invalidPassword");
+      return;
     }
     if (re_password == null || re_password.isEmpty() || !Objects.equals(password, re_password)) {
-      req.setAttribute("status", "invalidRePassword");
-      dispatcher = req.getRequestDispatcher("/registration");
-      dispatcher.forward(req, resp);
+      forwardWithStatus(req, resp, "registration.jsp", "invalidRePassword");
+      return;
     }
     if (phone == null || phone.isEmpty()) {
-      req.setAttribute("status", "invalidPhone");
-      dispatcher = req.getRequestDispatcher("/registration");
-      dispatcher.forward(req, resp);
+      forwardWithStatus(req, resp, "registration.jsp", "invalidPhone");
+      return;
     } else if (phone.length() > 10) {
-      req.setAttribute("status", "invalidPhoneLength");
-      dispatcher = req.getRequestDispatcher("/registration");
-      dispatcher.forward(req, resp);
+      forwardWithStatus(req, resp, "registration.jsp", "invalidPhoneLength");
+      return;
     }
+
+    userService.createNewUser(new UserDto(username, email, phone, password));
+
+    req.setAttribute("status", "success");
+    req.getRequestDispatcher("login.jsp").forward(req, resp);
+
+    //    if (result > 0) {
+    //      req.setAttribute("status", "success");
+    //      dispatcher = req.getRequestDispatcher("login.jsp");
+    //      dispatcher.forward(req, resp);
+    //    } else {
+    //      req.setAttribute("status", "failed");
+    //      dispatcher = req.getRequestDispatcher("registration.jsp");
+    //      dispatcher.forward(req, resp);
+    //    }
+  }
+
+  private void forwardWithStatus(
+      HttpServletRequest req, HttpServletResponse resp, String page, String status) {
+    req.setAttribute("status", status);
+    RequestDispatcher requestDispatcher = req.getRequestDispatcher(page);
 
     try {
-      Class.forName("org.postgresql.Driver");
-    } catch (ClassNotFoundException e) {
-      throw new RuntimeException(e);
-    }
-
-    try (Connection connection =
-        DriverManager.getConnection(
-            "jdbc:postgresql://localhost:5432/users?useSSL=false", "postgres", "Cokolsuper12"); ) {
-
-      PreparedStatement pst =
-          connection.prepareStatement(
-              "insert into \"users\".\"users\" (name, email, phone, password) values (?, ?, ?, ?)");
-
-      pst.setString(1, username);
-      pst.setString(2, email);
-      pst.setString(3, phone);
-      pst.setString(4, password);
-
-      int result = pst.executeUpdate();
-
-      if (result > 0) {
-        req.setAttribute("status", "success");
-        dispatcher = req.getRequestDispatcher("login.jsp");
-        dispatcher.forward(req, resp);
-      } else {
-        req.setAttribute("status", "failed");
-        dispatcher = req.getRequestDispatcher("registration.jsp");
-        dispatcher.forward(req, resp);
-      }
-
-    } catch (SQLException e) {
+      requestDispatcher.forward(req, resp);
+    } catch (ServletException | IOException e) {
       throw new RuntimeException(e);
     }
   }
