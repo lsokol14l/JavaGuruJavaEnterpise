@@ -25,7 +25,7 @@ public class UserDao {
       pst.setString(1, newUser.getName());
       pst.setString(2, newUser.getLogin());
       pst.setString(3, newUser.getPhoneNumber());
-      pst.setString(4, newUser.getName());
+      pst.setString(4, newUser.getPassword());
 
       pst.executeUpdate();
     } catch (SQLException e) {
