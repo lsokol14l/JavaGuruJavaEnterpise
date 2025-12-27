@@ -1,52 +1,61 @@
 package by.michael.dao;
 
+import by.michael.config.DatabaseConfig;
 import by.michael.entity.User;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import javax.xml.crypto.Data;
 import java.io.File;
 import java.io.IOException;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
 public class UserDao {
-  public static final String FILEPATH;
-  ObjectMapper objectMapper = new ObjectMapper();
-  List<User> users = new ArrayList<>();
-
-  static {
-    FILEPATH = System.getenv("CATALINA_BASE") + "/data.json";
-    File file = new File(FILEPATH);
-    if (!file.exists()) {
-      try {
-        file.createNewFile();
-      } catch (IOException e) {
-        System.err.println("check filepath for data.json: " + FILEPATH);
-        throw new RuntimeException(e);
-      }
-    }
-  }
-
   public void createNewUser(User newUser) {
-    users.add(newUser);
-    writeToJson();
-  }
+    String sql = "insert into users.users.users (name, email, phone, password) values (?,?,?,?)";
 
-  private void updateDataFromJson() {
-    File file = new File(FILEPATH);
-    try {
-      users = objectMapper.readValue(file, new TypeReference<>() {});
-    } catch (IOException e) {
-      throw new RuntimeException(e);
+    try (Connection connection = DatabaseConfig.getConnection();
+        PreparedStatement pst = connection.prepareStatement(sql)) {
+
+      pst.setString(1, newUser.getName());
+      pst.setString(2, newUser.getLogin());
+      pst.setString(3, newUser.getPhoneNumber());
+      pst.setString(4, newUser.getName());
+
+      pst.executeUpdate();
+    } catch (SQLException e) {
+      throw new RuntimeException("Error creating user", e);
     }
   }
 
-  private void writeToJson() {
-    File file = new File(FILEPATH);
-    try {
-      objectMapper.writeValue(file, users);
-    } catch (IOException e) {
-      throw new RuntimeException(e);
+  public User findByEmailAndPassword(String email, String password) {
+    String sql = "select * from users.users.users u where u.email = ? and u.password = ?";
+
+    try (Connection connection = DatabaseConfig.getConnection();
+        PreparedStatement pst = connection.prepareStatement(sql); ) {
+
+      pst.setString(1, email);
+      pst.setString(2, password);
+
+      ResultSet resultSet = pst.executeQuery();
+
+      if (resultSet.next()) {
+        return new User(
+            resultSet.getString("name"),
+            resultSet.getString("email"),
+            resultSet.getString("phone"),
+            resultSet.getString("password"));
+      }
+
+    } catch (SQLException e) {
+      throw new RuntimeException("Error finding user", e);
     }
+
+    return null;
   }
 }

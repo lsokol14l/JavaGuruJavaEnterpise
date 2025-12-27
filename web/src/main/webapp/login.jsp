@@ -36,9 +36,9 @@
                     <form method="post" action="login" class="register-form"
                           id="login-form">
                         <div class="form-group">
-                            <label for="username"><i
+                            <label for="email"><i
                                     class="zmdi zmdi-account material-icons-name"></i></label> <input
-                                type="text" name="username" id="username"
+                                type="text" name="email" id="email"
                                 placeholder="Your Email" required/>
                         </div>
                         <div class="form-group">

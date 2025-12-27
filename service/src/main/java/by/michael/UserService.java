@@ -11,13 +11,17 @@ public class UserService {
     userDao.createNewUser(
         new User(
             newUser.getName(),
-            newUser.getAge(),
-            newUser.getPhoneNumber(),
             newUser.getLogin(),
+            newUser.getPhoneNumber(),
             newUser.getPassword()));
   }
 
-//  public boolean login(String login, String password) {
-//    return userDao.
-//  }
+  public UserDto authenticate(String email, String password) {
+    User user = userDao.findByEmailAndPassword(email, password);
+    if (user != null) {
+      return new UserDto(
+          user.getName(), user.getPhoneNumber(), user.getLogin(), user.getPassword());
+    }
+    return null;
+  }
 }
