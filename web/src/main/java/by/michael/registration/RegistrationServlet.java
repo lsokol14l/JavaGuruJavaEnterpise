@@ -9,6 +9,7 @@ import jakarta.servlet.http.HttpServletResponse;
 
 import java.io.IOException;
 import java.sql.*;
+import java.util.Objects;
 
 @WebServlet("/registration")
 public class RegistrationServlet extends HttpServlet {
@@ -22,6 +23,36 @@ public class RegistrationServlet extends HttpServlet {
     String phone = req.getParameter("phoneNumber");
 
     RequestDispatcher dispatcher;
+
+    if (username == null || username.isEmpty()) {
+      req.setAttribute("status", "invalidName");
+      dispatcher = req.getRequestDispatcher("/registration");
+      dispatcher.forward(req, resp);
+    }
+    if (email == null || email.isEmpty()) {
+      req.setAttribute("status", "invalidEmail");
+      dispatcher = req.getRequestDispatcher("/registration");
+      dispatcher.forward(req, resp);
+    }
+    if (password == null || password.isEmpty()) {
+      req.setAttribute("status", "invalidPassword");
+      dispatcher = req.getRequestDispatcher("/registration");
+      dispatcher.forward(req, resp);
+    }
+    if (re_password == null || re_password.isEmpty() || !Objects.equals(password, re_password)) {
+      req.setAttribute("status", "invalidRePassword");
+      dispatcher = req.getRequestDispatcher("/registration");
+      dispatcher.forward(req, resp);
+    }
+    if (phone == null || phone.isEmpty()) {
+      req.setAttribute("status", "invalidPhone");
+      dispatcher = req.getRequestDispatcher("/registration");
+      dispatcher.forward(req, resp);
+    } else if (phone.length() > 10) {
+      req.setAttribute("status", "invalidPhoneLength");
+      dispatcher = req.getRequestDispatcher("/registration");
+      dispatcher.forward(req, resp);
+    }
 
     try {
       Class.forName("org.postgresql.Driver");
@@ -44,14 +75,15 @@ public class RegistrationServlet extends HttpServlet {
 
       int result = pst.executeUpdate();
 
-      dispatcher = req.getRequestDispatcher("registration.jsp");
       if (result > 0) {
         req.setAttribute("status", "success");
+        dispatcher = req.getRequestDispatcher("login.jsp");
+        dispatcher.forward(req, resp);
       } else {
         req.setAttribute("status", "failed");
+        dispatcher = req.getRequestDispatcher("registration.jsp");
+        dispatcher.forward(req, resp);
       }
-
-      dispatcher.forward(req, resp);
 
     } catch (SQLException e) {
       throw new RuntimeException(e);

@@ -20,7 +20,21 @@ public class LoginServlet extends HttpServlet {
     String name = req.getParameter("username");
     String password = req.getParameter("password");
 
-    // 3. Для передачи данных между страничками нужно создать Session
+    RequestDispatcher requestDispatcher;
+
+    if (name == null || name.isEmpty()) {
+      req.setAttribute("status", "invalidEmail");
+      requestDispatcher = req.getRequestDispatcher("login.jsp");
+      requestDispatcher.forward(req, resp);
+    }
+
+    if (password == null || password.isEmpty()) {
+      req.setAttribute("status", "invalidPassword");
+      requestDispatcher = req.getRequestDispatcher("login.jsp");
+      requestDispatcher.forward(req, resp);
+    }
+
+    // 3. Для передачи данных между страничками нужно добавить атрибутов в Session
     HttpSession session = req.getSession();
 
     // 0. Непонятный момент почему без этого кода не работает
@@ -39,7 +53,6 @@ public class LoginServlet extends HttpServlet {
               "select * from \"users\".\"users\" where email=? and password=?;");
       pst.setString(1, name);
       pst.setString(2, password);
-      RequestDispatcher requestDispatcher;
       ResultSet resultSet = pst.executeQuery();
 
       if (resultSet.next()) {
