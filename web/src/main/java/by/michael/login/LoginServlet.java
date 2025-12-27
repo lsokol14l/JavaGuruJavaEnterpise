@@ -11,7 +11,6 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 
 import java.io.IOException;
-import java.sql.*;
 
 @WebServlet("/login")
 public class LoginServlet extends HttpServlet {

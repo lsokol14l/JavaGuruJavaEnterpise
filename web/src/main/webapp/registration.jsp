@@ -99,6 +99,8 @@
         swal("Error", "Please Enter a PhoneNumber", "failed");
     } else if (status === "invalidPhoneLength") {
         swal("Error", "PhoneNumber is too big", "failed");
+    } else if (status === "userAlreadyExists") {
+        swal("Error", "User with this email already exists", "failed");
     }
 </script>
 

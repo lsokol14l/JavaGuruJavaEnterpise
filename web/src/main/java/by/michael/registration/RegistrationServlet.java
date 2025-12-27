@@ -10,7 +10,6 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
 import java.io.IOException;
-import java.sql.*;
 import java.util.Objects;
 
 @WebServlet("/registration")
@@ -50,20 +49,14 @@ public class RegistrationServlet extends HttpServlet {
       return;
     }
 
+    if (userService.findUser(email) != null) {
+      forwardWithStatus(req, resp, "registration.jsp", "userAlreadyExists");
+    }
+
     userService.createNewUser(new UserDto(username, email, phone, password));
 
     req.setAttribute("status", "success");
     req.getRequestDispatcher("login.jsp").forward(req, resp);
-
-    //    if (result > 0) {
-    //      req.setAttribute("status", "success");
-    //      dispatcher = req.getRequestDispatcher("login.jsp");
-    //      dispatcher.forward(req, resp);
-    //    } else {
-    //      req.setAttribute("status", "failed");
-    //      dispatcher = req.getRequestDispatcher("registration.jsp");
-    //      dispatcher.forward(req, resp);
-    //    }
   }
 
   private void forwardWithStatus(

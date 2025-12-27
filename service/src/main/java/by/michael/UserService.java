@@ -23,4 +23,12 @@ public class UserService {
     }
     return null;
   }
+
+  public UserDto findUser(String email) {
+    User user = userDao.findByEmail(email);
+    if (user != null)
+      return new UserDto(user.getName(), user.getEmail(), user.getPhone(), user.getPassword());
+
+    return null;
+  }
 }
