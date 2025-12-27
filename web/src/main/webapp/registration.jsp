@@ -16,7 +16,7 @@
 
 <body>
 
-<input type="hidden" id="status" value="<%= String.valueOf(request.getAttribute(" status")) %>">
+<input type="hidden" id="status" value="<%= String.valueOf(request.getAttribute("status")) %>">
 
 <div class="main">
 
@@ -88,19 +88,19 @@
     if (status === "success") {
         swal("Congrats", "Account created successfully", "success");
     } else if (status === "invalidName") {
-        swal("Error", "Please Enter a Name", "failed");
+        swal("Error", "Please Enter a Name", "error");
     } else if (status === "invalidEmail") {
-        swal("Error", "Please Enter a Email", "failed");
+        swal("Error", "Please Enter a Email", "error");
     } else if (status === "invalidPassword") {
-        swal("Error", "Please Enter a Password", "failed");
+        swal("Error", "Please Enter a Password", "error");
     } else if (status === "invalidRePassword") {
-        swal("Error", "Password and RePassword are not the same", "failed");
+        swal("Error", "Password and RePassword are not the same", "error");
     } else if (status === "invalidPhone") {
-        swal("Error", "Please Enter a PhoneNumber", "failed");
+        swal("Error", "Please Enter a PhoneNumber", "error");
     } else if (status === "invalidPhoneLength") {
-        swal("Error", "PhoneNumber is too big", "failed");
+        swal("Error", "PhoneNumber is too big", "error");
     } else if (status === "userAlreadyExists") {
-        swal("Error", "User with this email already exists", "failed");
+        swal("Error", "User with this email already exists", "error");
     }
 </script>
 

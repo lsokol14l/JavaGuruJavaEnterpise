@@ -48,9 +48,9 @@ public class RegistrationServlet extends HttpServlet {
       forwardWithStatus(req, resp, "registration.jsp", "invalidPhoneLength");
       return;
     }
-
     if (userService.findUser(email) != null) {
       forwardWithStatus(req, resp, "registration.jsp", "userAlreadyExists");
+      return;
     }
 
     userService.createNewUser(new UserDto(username, email, phone, password));
