@@ -25,9 +25,9 @@ public class Module4Servlet extends HttpServlet {
         out.println("<h1>" + message + "</h1>");
         out.println("</body></html>");
 
-        out.println("<a href=\"module3\"><- предыдущий модуль</a>");
+        out.println("<a href=\"module3\"><-</a>");
         out.println("<br>");
-        out.println("<a href=\"#\">следующий модуль -></a>");
+        out.println("<a href=\"#\">-></a>");
     }
 
     public void destroy() {

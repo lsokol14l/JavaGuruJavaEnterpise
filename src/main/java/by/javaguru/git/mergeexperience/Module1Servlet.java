@@ -27,14 +27,14 @@ public class Module1Servlet extends HttpServlet {
                     + value.getOrder() + "</td><td>"
                     + value.getTopic() + "</td><td>"
                     + value.getDesc()
-                    + "</td><td><a href=''>Подробнее</a>"
+                    + "</td><td><a href='" + value.toString().toLowerCase() +"'>Подробнее</a>"
                     + "</td></tr>");
 
         out.println("</table>");
 
-        out.println("<a href=\"#\"><- предыдущий модуль</a>");
+        out.println("<a href=\"#\"><-</a>");
         out.println("<br>");
-        out.println("<a href=\"module2\">следующий модуль -></a>");
+        out.println("<a href=\"module2\">-></a>");
 
         out.println("</body></html>");
     }
